@@ -1,6 +1,6 @@
-package dev.LimaDevCod3r.PitStopAPI.Vehicles.Model;
+package dev.LimaDevCod3r.PitStopAPI.Vehicles;
 
-import dev.LimaDevCod3r.PitStopAPI.Customers.Model.CustomerModel;
+import dev.LimaDevCod3r.PitStopAPI.Customers.CustomerModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class VehicleModel {
     @Column(nullable = false, length = 50)
     private String model;
 
-    @Column(nullable = false)
+    @Column(name = "manufacture_year", nullable = false)
     private String year;
 
     @Column(nullable = false, unique = true, length = 10)
