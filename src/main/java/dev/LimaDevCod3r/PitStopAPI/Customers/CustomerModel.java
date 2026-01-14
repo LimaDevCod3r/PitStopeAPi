@@ -1,6 +1,6 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers.Model;
+package dev.LimaDevCod3r.PitStopAPI.Customers;
 
-import dev.LimaDevCod3r.PitStopAPI.Vehicles.Model.VehicleModel;
+import dev.LimaDevCod3r.PitStopAPI.Vehicles.VehicleModel;
 import jakarta.persistence.*;
 import lombok.*;
 
