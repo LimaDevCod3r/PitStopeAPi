@@ -1,0 +1,32 @@
+package dev.LimaDevCod3r.PitStopAPI.Customers.Model;
+
+import dev.LimaDevCod3r.PitStopAPI.Vehicles.Model.VehicleModel;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "tb_customers")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // Um cliente pode ter muitos veículos
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VehicleModel> vehicles;
+
+    @Column(nullable = false,length = 100)
+    private String name;
+
+    @Column(nullable = false, unique = true,length = 120)
+    private String email;
+
+    @Column(nullable = false,length = 20)
+    private String phone;
+
+}
