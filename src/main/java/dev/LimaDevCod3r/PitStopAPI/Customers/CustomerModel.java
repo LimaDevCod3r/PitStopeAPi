@@ -23,6 +23,9 @@ public class CustomerModel {
     @Column(nullable = false,length = 100)
     private String name;
 
+    @Column(nullable = false,length = 11)
+    private String cpf;
+
     @Column(nullable = false, unique = true,length = 120)
     private String email;
 
