@@ -1,5 +1,7 @@
 package dev.LimaDevCod3r.PitStopAPI.Customers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.LimaDevCod3r.PitStopAPI.Vehicles.VehicleModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +20,7 @@ public class CustomerModel {
 
     // Um cliente pode ter muitos veículos
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("customer")
     private List<VehicleModel> vehicles;
 
     @Column(nullable = false,length = 100)

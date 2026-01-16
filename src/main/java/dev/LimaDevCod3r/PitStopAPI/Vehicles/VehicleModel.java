@@ -1,5 +1,7 @@
 package dev.LimaDevCod3r.PitStopAPI.Vehicles;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.LimaDevCod3r.PitStopAPI.Customers.CustomerModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ public class VehicleModel {
     // Muitos veiculos para um Cliente
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @JsonIgnoreProperties("vehicles")
     private CustomerModel customer;
 
     @Column(name = "customer_id", insertable = false, updatable = false)
