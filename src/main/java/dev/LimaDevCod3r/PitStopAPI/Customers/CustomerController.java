@@ -20,8 +20,8 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public String getById() {
-        throw new UnsupportedOperationException();
+    public CustomerModel getById(@PathVariable("id") Long id) {
+        return this.customerService.getById(id);
     }
 
     @PostMapping
