@@ -1,6 +1,5 @@
 package dev.LimaDevCod3r.PitStopAPI.Customers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.LimaDevCod3r.PitStopAPI.Vehicles.VehicleModel;
 import jakarta.persistence.*;
@@ -23,16 +22,16 @@ public class CustomerModel {
     @JsonIgnoreProperties("customer")
     private List<VehicleModel> vehicles;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false,length = 11)
+    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
 
-    @Column(nullable = false, unique = true,length = 120)
+    @Column(nullable = false, unique = true, length = 120)
     private String email;
 
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     private String phone;
 
 }
