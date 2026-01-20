@@ -26,4 +26,8 @@ public class CustomerService {
     public CustomerModel create(CustomerModel customerModel) {
         return customerRepository.save(customerModel);
     }
+
+    public void deleteById(Long id){
+        customerRepository.deleteById(id);
+    }
 }

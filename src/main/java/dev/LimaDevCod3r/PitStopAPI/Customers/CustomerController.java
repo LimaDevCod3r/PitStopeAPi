@@ -35,7 +35,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete() {
-        throw new UnsupportedOperationException();
+    public void delete(@PathVariable("id") Long id) {
+        this.customerService.deleteById(id);
     }
 }
