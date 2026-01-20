@@ -25,8 +25,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public String create() {
-        throw new UnsupportedOperationException();
+    public CustomerModel create(@RequestBody CustomerModel customer) {
+       return this.customerService.create(customer);
     }
 
     @PutMapping("/{id}")

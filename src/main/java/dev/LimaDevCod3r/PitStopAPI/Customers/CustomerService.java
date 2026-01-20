@@ -22,4 +22,8 @@ public class CustomerService {
         Optional<CustomerModel> customerById = customerRepository.findById(id);
         return customerById.orElse(null);
     }
+
+    public CustomerModel create(CustomerModel customerModel) {
+        return customerRepository.save(customerModel);
+    }
 }
