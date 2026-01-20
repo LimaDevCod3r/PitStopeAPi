@@ -27,6 +27,19 @@ public class CustomerService {
         return customerRepository.save(customerModel);
     }
 
+    public CustomerModel update(Long id, CustomerModel customerModel) {
+        Optional<CustomerModel> customerById = customerRepository.findById(id);
+        if(customerById.isEmpty()){
+            return null;
+        }
+        CustomerModel customerModelToUpdate = customerById.get();
+        customerModelToUpdate.setName(customerModel.getName());
+        customerModelToUpdate.setEmail(customerModel.getEmail());
+        customerModelToUpdate.setPhone(customerModel.getPhone());
+        customerModelToUpdate.setCpf(customerModel.getCpf());
+        return customerRepository.save(customerModelToUpdate);
+    }
+
     public void deleteById(Long id){
         customerRepository.deleteById(id);
     }

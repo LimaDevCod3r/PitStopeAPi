@@ -30,8 +30,8 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public String update() {
-        throw new UnsupportedOperationException();
+    public CustomerModel update(@PathVariable("id") Long id, @RequestBody CustomerModel customerModel) {
+        return this.customerService.update(id, customerModel);
     }
 
     @DeleteMapping("/{id}")
