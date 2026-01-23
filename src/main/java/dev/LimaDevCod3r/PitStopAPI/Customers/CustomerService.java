@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -16,36 +17,41 @@ public class CustomerService {
         this.customerMapper = customerMapper;
     }
 
-    public List<CustomerModel> getAll() {
-        return customerRepository.findAll();
+    public List<CustomerResponseDTO> getAll() {
+        List<CustomerModel> customers = customerRepository.findAll();
+        return customers.stream()
+                .map(customerMapper::mapToResponse)
+                .collect(Collectors.toList());
     }
 
-    public CustomerModel getById(Long id) {
+    public CustomerResponseDTO getById(Long id) {
         Optional<CustomerModel> customerById = customerRepository.findById(id);
-        return customerById.orElse(null);
+        return customerById.map(customerMapper::mapToResponse).orElse(null);
     }
 
     public CustomerDTO create(CustomerDTO customerDTO) {
-        CustomerModel customerModelToPersist = customerMapper.map(customerDTO);
+        CustomerModel customerModelToPersist = customerMapper.mapToModel(customerDTO);
         CustomerModel persistedCustomerModel = customerRepository.save(customerModelToPersist);
-        return customerMapper.map(persistedCustomerModel);
+        return customerMapper.mapToDTO(persistedCustomerModel);
     }
 
 
-    public CustomerModel update(Long id, CustomerModel customerModel) {
+    public CustomerResponseDTO update(Long id, CustomerDTO customerDTO) {
         Optional<CustomerModel> customerById = customerRepository.findById(id);
-        if(customerById.isEmpty()){
+        if (customerById.isEmpty()) {
             return null;
         }
         CustomerModel customerModelToUpdate = customerById.get();
-        customerModelToUpdate.setName(customerModel.getName());
-        customerModelToUpdate.setEmail(customerModel.getEmail());
-        customerModelToUpdate.setPhone(customerModel.getPhone());
-        customerModelToUpdate.setCpf(customerModel.getCpf());
-        return customerRepository.save(customerModelToUpdate);
+        customerModelToUpdate.setName(customerDTO.getName());
+        customerModelToUpdate.setEmail(customerDTO.getEmail());
+        customerModelToUpdate.setPhone(customerDTO.getPhone());
+        customerModelToUpdate.setCpf(customerDTO.getCpf());
+        customerRepository.save(customerModelToUpdate);
+
+        return customerMapper.mapToResponse(customerModelToUpdate);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         customerRepository.deleteById(id);
     }
 }
