@@ -9,9 +9,11 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
     public List<CustomerModel> getAll() {
@@ -23,9 +25,12 @@ public class CustomerService {
         return customerById.orElse(null);
     }
 
-    public CustomerModel create(CustomerModel customerModel) {
-        return customerRepository.save(customerModel);
+    public CustomerDTO create(CustomerDTO customerDTO) {
+        CustomerModel customerModelToPersist = customerMapper.map(customerDTO);
+        CustomerModel persistedCustomerModel = customerRepository.save(customerModelToPersist);
+        return customerMapper.map(persistedCustomerModel);
     }
+
 
     public CustomerModel update(Long id, CustomerModel customerModel) {
         Optional<CustomerModel> customerById = customerRepository.findById(id);
