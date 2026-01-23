@@ -25,8 +25,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerModel create(@RequestBody CustomerModel customer) {
-       return this.customerService.create(customer);
+    public CustomerDTO create(@RequestBody CustomerDTO customerDTO) {
+       return this.customerService.create(customerDTO);
     }
 
     @PutMapping("/{id}")
