@@ -15,12 +15,12 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<CustomerModel> getAll() {
+    public List<CustomerResponseDTO> getAll() {
       return  this.customerService.getAll();
     }
 
     @GetMapping("/{id}")
-    public CustomerModel getById(@PathVariable("id") Long id) {
+    public CustomerResponseDTO getById(@PathVariable("id") Long id) {
         return this.customerService.getById(id);
     }
 
@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public CustomerModel update(@PathVariable("id") Long id, @RequestBody CustomerModel customerModel) {
+    public CustomerResponseDTO update(@PathVariable("id") Long id, @RequestBody CustomerDTO customerModel) {
         return this.customerService.update(id, customerModel);
     }
 
