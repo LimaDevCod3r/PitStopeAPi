@@ -20,22 +20,22 @@ public class VehicleController {
     }
 
     @GetMapping("/{id}")
-    public String getById() {
-        throw new UnsupportedOperationException();
+    public VehicleModel getById(@PathVariable("id") Long id) {
+        return this.vehicleService.getById(id);
     }
 
     @PostMapping
-    public String create() {
-        throw new UnsupportedOperationException();
+    public VehicleModel create(@RequestBody VehicleModel vehicleModel) {
+        return this.vehicleService.create(vehicleModel);
     }
 
     @PutMapping("/{id}")
-    public String update() {
-        throw new UnsupportedOperationException();
+    public VehicleModel update(@PathVariable("id") Long id, @RequestBody VehicleModel vehicleModel) {
+        return this.vehicleService.update(id, vehicleModel);
     }
 
     @DeleteMapping("/{id}")
-    public String delete() {
-        throw new UnsupportedOperationException();
+    public void delete(@PathVariable("id") Long id) {
+        this.vehicleService.deleteById(id);
     }
 }
