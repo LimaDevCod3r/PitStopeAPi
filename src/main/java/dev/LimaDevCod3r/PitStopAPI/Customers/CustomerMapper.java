@@ -5,24 +5,34 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerMapper {
 
-    public CustomerModel map(CustomerDTO customerDTO) {
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setId(customerDTO.getId());
-        customerModel.setName(customerDTO.getName());
-        customerModel.setEmail(customerDTO.getEmail());
-        customerModel.setCpf(customerDTO.getCpf());
-        customerModel.setPhone(customerDTO.getPhone());
-
-        return customerModel;
+    public CustomerModel mapToModel(CustomerDTO source) {
+        CustomerModel target = new CustomerModel();
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setEmail(source.getEmail());
+        target.setCpf(source.getCpf());
+        target.setPhone(source.getPhone());
+        return target;
     }
 
-    public CustomerDTO map(CustomerModel customerModel){
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setId(customerModel.getId());
-        customerDTO.setName(customerModel.getName());
-        customerDTO.setEmail(customerModel.getEmail());
-        customerDTO.setCpf(customerModel.getCpf());
-        customerDTO.setPhone(customerModel.getPhone());
-        return customerDTO;
+    public CustomerDTO mapToDTO(CustomerModel source) {
+        CustomerDTO target = new CustomerDTO();
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setEmail(source.getEmail());
+        target.setCpf(source.getCpf());
+        target.setPhone(source.getPhone());
+        return target;
+    }
+
+    public CustomerResponseDTO mapToResponse(CustomerModel source) {
+        CustomerResponseDTO target = new CustomerResponseDTO();
+        target.setId(source.getId());
+        target.setName(source.getName());
+        target.setEmail(source.getEmail());
+        target.setCpf(source.getCpf());
+        target.setPhone(source.getPhone());
+        target.setVehicleModel(source.getVehicles());
+        return target;
     }
 }
