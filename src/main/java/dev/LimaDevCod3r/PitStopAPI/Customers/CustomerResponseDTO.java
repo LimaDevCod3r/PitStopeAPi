@@ -1,5 +1,6 @@
 package dev.LimaDevCod3r.PitStopAPI.Customers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.LimaDevCod3r.PitStopAPI.Vehicles.VehicleModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class CustomerResponseDTO {
 
     private String phone;
 
-    private List<VehicleModel> vehicleModel;
+    @JsonIgnoreProperties("customer")
+    private List<VehicleModel> vehicles;
 }
