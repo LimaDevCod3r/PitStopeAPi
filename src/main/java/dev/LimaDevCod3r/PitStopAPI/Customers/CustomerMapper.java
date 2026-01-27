@@ -32,7 +32,7 @@ public class CustomerMapper {
         target.setEmail(source.getEmail());
         target.setCpf(source.getCpf());
         target.setPhone(source.getPhone());
-        target.setVehicleModel(source.getVehicles());
+        target.setVehicles(source.getVehicles());
         return target;
     }
 }
