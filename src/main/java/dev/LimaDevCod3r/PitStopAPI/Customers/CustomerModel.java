@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "vehicles")
 public class CustomerModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
