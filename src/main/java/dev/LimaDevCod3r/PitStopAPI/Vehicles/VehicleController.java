@@ -15,23 +15,23 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<VehicleModel> getAll() {
+    public List<VehicleResponseDTO> getAll() {
         return this.vehicleService.getAll();
     }
 
     @GetMapping("/{id}")
-    public VehicleModel getById(@PathVariable("id") Long id) {
+    public VehicleResponseDTO getById(@PathVariable("id") Long id) {
         return this.vehicleService.getById(id);
     }
 
     @PostMapping
-    public VehicleModel create(@RequestBody VehicleModel vehicleModel) {
-        return this.vehicleService.create(vehicleModel);
+    public VehicleDTO create(@RequestBody VehicleDTO vehicleDTO) {
+        return this.vehicleService.create(vehicleDTO);
     }
 
     @PutMapping("/{id}")
-    public VehicleModel update(@PathVariable("id") Long id, @RequestBody VehicleModel vehicleModel) {
-        return this.vehicleService.update(id, vehicleModel);
+    public VehicleResponseDTO update(@PathVariable("id") Long id, @RequestBody VehicleDTO vehicleDTO) {
+        return this.vehicleService.update(id, vehicleDTO);
     }
 
     @DeleteMapping("/{id}")
