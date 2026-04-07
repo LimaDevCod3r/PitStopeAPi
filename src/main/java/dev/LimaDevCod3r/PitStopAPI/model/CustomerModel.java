@@ -37,4 +37,11 @@ public class CustomerModel {
     @Column(nullable = false, length = 20)
     private String phone;
 
+    @Column(name = "is_active", nullable = false)
+    private Boolean active = true;
+
+    public void deactivate() {
+        this.active = false;
+    }
+
 }
