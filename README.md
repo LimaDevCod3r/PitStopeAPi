@@ -122,6 +122,10 @@ mvn test -Dtest=VehicleServiceTest
 mvn test -Dtest=CustomerServiceTest
 ```
 
+## Frontend
+
+O projeto frontend está disponível em: [PitStop-React](https://github.com/LimaDevCod3r/PitStop-React?tab=readme-ov-file).
+
 ## Migrações (Flyway)
 
 Rodadas automaticamente na inicialização em `src/main/resources/db/migrations/`:
