@@ -1,18 +1,17 @@
 package dev.LimaDevCod3r.PitStopAPI.mapper;
 
-import dev.LimaDevCod3r.PitStopAPI.dto.VehicleDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleRequestDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.VehicleResponseDTO;
 import dev.LimaDevCod3r.PitStopAPI.model.VehicleModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VehicleMapper {
-    public VehicleModel mapToModel(VehicleDTO source) {
+    public VehicleModel mapToModel(VehicleRequestDTO source) {
      if(source == null) {
          return null;
      }
         VehicleModel model = new VehicleModel();
-        model.setId(source.getId());
         model.setBrand(source.getBrand());
         model.setModel(source.getModel());
         model.setYear(source.getYear());
@@ -22,22 +21,21 @@ public class VehicleMapper {
         return model;
     }
 
-    public VehicleDTO mapToDTO(VehicleModel source) {
+    public VehicleRequestDTO mapToDTO(VehicleModel source) {
         if(source == null) {
             return null;
         }
-        VehicleDTO vehicleDTO = new VehicleDTO();
-        vehicleDTO.setId(source.getId());
-        vehicleDTO.setBrand(source.getBrand());
-        vehicleDTO.setModel(source.getModel());
-        vehicleDTO.setYear(source.getYear());
-        vehicleDTO.setPlate(source.getPlate());
-        vehicleDTO.setColor(source.getColor());
+        VehicleRequestDTO vehicleRequestDTO = new VehicleRequestDTO();
+        vehicleRequestDTO.setBrand(source.getBrand());
+        vehicleRequestDTO.setModel(source.getModel());
+        vehicleRequestDTO.setYear(source.getYear());
+        vehicleRequestDTO.setPlate(source.getPlate());
+        vehicleRequestDTO.setColor(source.getColor());
 
         if(source.getCustomerId() != null) {
-            vehicleDTO.setCustomerId(source.getCustomerId());
+            vehicleRequestDTO.setCustomerId(source.getCustomerId());
         }
-        return vehicleDTO;
+        return vehicleRequestDTO;
 
     }
 
