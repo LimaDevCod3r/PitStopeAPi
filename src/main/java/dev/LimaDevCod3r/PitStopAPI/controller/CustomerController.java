@@ -1,12 +1,15 @@
 package dev.LimaDevCod3r.PitStopAPI.controller;
 
-import dev.LimaDevCod3r.PitStopAPI.dto.CustomerDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerRequestDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
 import dev.LimaDevCod3r.PitStopAPI.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +30,8 @@ public class CustomerController {
     @Operation(summary = "Busca todos os clientes", description = "Retorna uma lista com todos os clientes cadastrados")
     @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso")
     @GetMapping
-    public ResponseEntity<List<CustomerResponseDTO>> getAll() {
-        return ResponseEntity.ok(customerService.getAll());
+    public ResponseEntity<Page<CustomerResponseDTO>> getAll(Pageable pageable) {
+        return ResponseEntity.ok(customerService.getAll(pageable));
     }
 
     @Operation(summary = "Busca um cliente por ID", description = "Retorna um cliente com base no ID fornecido")
@@ -47,10 +50,11 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<String> create(
             @Parameter(description = "Dados do cliente a serem criados")
-            @RequestBody CustomerDTO customerDTO) {
-        var customer = customerService.create(customerDTO);
+            @Valid
+            @RequestBody CustomerRequestDTO customerRequestDTO) {
+        var customer = customerService.create(customerRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Cliente criado com sucesso: " + customer.getName() + " ID: " + customer.getId());
+                .body("Cliente criado com sucesso: " + customer.getName());
     }
 
     @Operation(summary = "Atualiza um cliente por ID", description = "Atualiza as informações de um cliente")
@@ -61,8 +65,8 @@ public class CustomerController {
             @Parameter(description = "ID do cliente a ser atualizado")
             @PathVariable("id") Long id,
             @Parameter(description = "Dados do cliente a serem atualizados")
-            @RequestBody CustomerDTO customerDTO) {
-        customerService.update(id, customerDTO);
+            @RequestBody CustomerRequestDTO customerRequestDTO) {
+        customerService.update(id, customerRequestDTO);
         return ResponseEntity.ok("Cliente atualizado com sucesso ID: " + id);
     }
 

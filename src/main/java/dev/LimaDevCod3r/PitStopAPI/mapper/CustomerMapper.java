@@ -1,6 +1,6 @@
 package dev.LimaDevCod3r.PitStopAPI.mapper;
 
-import dev.LimaDevCod3r.PitStopAPI.dto.CustomerDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerRequestDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
 import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
 import org.springframework.stereotype.Component;
@@ -8,9 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerMapper {
 
-    public CustomerModel mapToModel(CustomerDTO source) {
+    public CustomerModel mapToModel(CustomerRequestDTO source) {
         CustomerModel target = new CustomerModel();
-        target.setId(source.getId());
         target.setName(source.getName());
         target.setEmail(source.getEmail());
         target.setCpf(source.getCpf());
@@ -18,9 +17,8 @@ public class CustomerMapper {
         return target;
     }
 
-    public CustomerDTO mapToDTO(CustomerModel source) {
-        CustomerDTO target = new CustomerDTO();
-        target.setId(source.getId());
+    public CustomerRequestDTO mapToDTO(CustomerModel source) {
+        CustomerRequestDTO target = new CustomerRequestDTO();
         target.setName(source.getName());
         target.setEmail(source.getEmail());
         target.setCpf(source.getCpf());
