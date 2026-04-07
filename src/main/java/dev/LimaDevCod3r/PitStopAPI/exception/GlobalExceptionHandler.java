@@ -17,6 +17,19 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(InactiveResourceException.class)
+    public ResponseEntity<ErrorResponse> handleInactive(InactiveResourceException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.GONE)
+                .body(new ErrorResponse(
+                        "Resource Inactive",
+                        HttpStatus.GONE.value(),
+                        request.getRequestURI(),
+                        LocalDateTime.now(),
+                        List.of(new FieldErrorResponse(null, ex.getMessage()))
+                ));
+    }
+
+
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
