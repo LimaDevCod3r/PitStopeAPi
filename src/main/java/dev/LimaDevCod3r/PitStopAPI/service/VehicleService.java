@@ -2,6 +2,8 @@ package dev.LimaDevCod3r.PitStopAPI.service;
 
 import dev.LimaDevCod3r.PitStopAPI.dto.VehicleDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.VehicleResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.exception.DuplicateResourceException;
+import dev.LimaDevCod3r.PitStopAPI.exception.ResourceNotFoundException;
 import dev.LimaDevCod3r.PitStopAPI.mapper.VehicleMapper;
 import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
 import dev.LimaDevCod3r.PitStopAPI.model.VehicleModel;
@@ -10,7 +12,6 @@ import dev.LimaDevCod3r.PitStopAPI.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -26,58 +27,57 @@ public class VehicleService {
     }
 
     public List<VehicleResponseDTO> getAll() {
-        return this.vehicleRepository.findAll()
-                .stream()
-                .map(this.vehicleMapper::mapToResponse).toList();
+        return vehicleRepository.findAll().stream()
+                .map(vehicleMapper::mapToResponse)
+                .toList();
     }
 
     public VehicleResponseDTO getById(Long id) {
-        Optional<VehicleModel> vehicleById = this.vehicleRepository.findById(id);
-        return vehicleById.map(this.vehicleMapper::mapToResponse).orElse(null);
+        VehicleModel model = vehicleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle", id));
+        return vehicleMapper.mapToResponse(model);
     }
 
     public VehicleDTO create(VehicleDTO vehicleDTO) {
-        CustomerModel customer = customerRepository.findById(vehicleDTO.getCustomerId()).orElseThrow(
-                () -> new RuntimeException("Customer not found with id: " + vehicleDTO.getCustomerId())
-        );
+        CustomerModel customer = customerRepository.findById(vehicleDTO.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", vehicleDTO.getCustomerId()));
 
-        if(this.vehicleRepository.existsByPlate(vehicleDTO.getPlate())) {
-            throw new RuntimeException("Vehicle with plate " + vehicleDTO.getPlate() + " already exists");
+        if (vehicleRepository.existsByPlate(vehicleDTO.getPlate())) {
+            throw new DuplicateResourceException("Plate", vehicleDTO.getPlate());
         }
 
-        var entity = this.vehicleMapper.mapToModel(vehicleDTO);
+        VehicleModel entity = vehicleMapper.mapToModel(vehicleDTO);
         entity.setCustomer(customer);
-        var savedVehicle = vehicleRepository.save(entity);
-        return this.vehicleMapper.mapToDTO(savedVehicle);
+        VehicleModel saved = vehicleRepository.save(entity);
+        return vehicleMapper.mapToDTO(saved);
     }
 
     public VehicleResponseDTO update(Long id, VehicleDTO vehicleDTO) {
-      VehicleModel vehicleToUpdate = vehicleRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Vehicle not found with id: " + id)
-        );
+        VehicleModel vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle", id));
 
-        if(vehicleDTO.getCustomerId() != null && !vehicleDTO.getCustomerId().equals(vehicleToUpdate.getCustomer().getId())) {
-            CustomerModel customer = customerRepository.findById(vehicleDTO.getCustomerId()).orElseThrow(
-                    () -> new RuntimeException("Customer not found with id: " + vehicleDTO.getCustomerId())
-            );
-            vehicleToUpdate.setCustomer(customer);
+        if (vehicleDTO.getCustomerId() != null && !vehicleDTO.getCustomerId().equals(vehicle.getCustomer().getId())) {
+            CustomerModel customer = customerRepository.findById(vehicleDTO.getCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer", vehicleDTO.getCustomerId()));
+            vehicle.setCustomer(customer);
         }
 
-      if(!vehicleDTO.getPlate().equals(vehicleToUpdate.getPlate()) && this.vehicleRepository.existsByPlate(vehicleDTO.getPlate())) {
-          throw new RuntimeException("Vehicle with plate " + vehicleDTO.getPlate() + " already exists");
-      }
+        if (!vehicleDTO.getPlate().equals(vehicle.getPlate()) && vehicleRepository.existsByPlate(vehicleDTO.getPlate())) {
+            throw new DuplicateResourceException("Plate", vehicleDTO.getPlate());
+        }
 
-
-      vehicleToUpdate.setBrand(vehicleDTO.getBrand());
-      vehicleToUpdate.setModel(vehicleDTO.getModel());
-      vehicleToUpdate.setYear(vehicleDTO.getYear());
-      vehicleToUpdate.setColor(vehicleDTO.getColor());
-      vehicleToUpdate.setPlate(vehicleDTO.getPlate());
-      this.vehicleRepository.save(vehicleToUpdate);
-      return this.vehicleMapper.mapToResponse(vehicleToUpdate);
+        vehicle.setBrand(vehicleDTO.getBrand());
+        vehicle.setModel(vehicleDTO.getModel());
+        vehicle.setYear(vehicleDTO.getYear());
+        vehicle.setColor(vehicleDTO.getColor());
+        vehicle.setPlate(vehicleDTO.getPlate());
+        vehicleRepository.save(vehicle);
+        return vehicleMapper.mapToResponse(vehicle);
     }
 
     public void deleteById(Long id) {
-        this.vehicleRepository.deleteById(id);
+        vehicleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle", id));
+        vehicleRepository.deleteById(id);
     }
 }
