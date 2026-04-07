@@ -1,0 +1,2 @@
+ALTER TABLE tb_customers
+  ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT true;
