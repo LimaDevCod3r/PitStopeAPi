@@ -1,5 +1,8 @@
-package dev.LimaDevCod3r.PitStopAPI.Vehicles;
+package dev.LimaDevCod3r.PitStopAPI.mapper;
 
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.model.VehicleModel;
 import org.springframework.stereotype.Component;
 
 @Component

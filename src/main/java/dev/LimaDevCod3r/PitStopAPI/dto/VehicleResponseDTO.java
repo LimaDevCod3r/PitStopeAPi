@@ -1,7 +1,7 @@
-package dev.LimaDevCod3r.PitStopAPI.Vehicles;
+package dev.LimaDevCod3r.PitStopAPI.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.LimaDevCod3r.PitStopAPI.Customers.CustomerModel;
+import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

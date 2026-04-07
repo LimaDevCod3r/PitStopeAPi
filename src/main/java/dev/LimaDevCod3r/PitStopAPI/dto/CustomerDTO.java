@@ -1,4 +1,4 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers;
+package dev.LimaDevCod3r.PitStopAPI.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

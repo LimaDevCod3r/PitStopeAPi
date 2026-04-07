@@ -1,5 +1,8 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers;
+package dev.LimaDevCod3r.PitStopAPI.controller;
 
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

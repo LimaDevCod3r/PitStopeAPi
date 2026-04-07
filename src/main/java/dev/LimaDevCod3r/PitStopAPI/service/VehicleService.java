@@ -1,7 +1,12 @@
-package dev.LimaDevCod3r.PitStopAPI.Vehicles;
+package dev.LimaDevCod3r.PitStopAPI.service;
 
-import dev.LimaDevCod3r.PitStopAPI.Customers.CustomerModel;
-import dev.LimaDevCod3r.PitStopAPI.Customers.CustomerRepository;
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.mapper.VehicleMapper;
+import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
+import dev.LimaDevCod3r.PitStopAPI.model.VehicleModel;
+import dev.LimaDevCod3r.PitStopAPI.repository.CustomerRepository;
+import dev.LimaDevCod3r.PitStopAPI.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

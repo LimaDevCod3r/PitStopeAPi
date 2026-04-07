@@ -1,5 +1,8 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers;
+package dev.LimaDevCod3r.PitStopAPI.mapper;
 
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
 import org.springframework.stereotype.Component;
 
 @Component

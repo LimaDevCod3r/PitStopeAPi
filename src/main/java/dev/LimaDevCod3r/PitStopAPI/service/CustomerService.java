@@ -1,5 +1,10 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers;
+package dev.LimaDevCod3r.PitStopAPI.service;
 
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.mapper.CustomerMapper;
+import dev.LimaDevCod3r.PitStopAPI.model.CustomerModel;
+import dev.LimaDevCod3r.PitStopAPI.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

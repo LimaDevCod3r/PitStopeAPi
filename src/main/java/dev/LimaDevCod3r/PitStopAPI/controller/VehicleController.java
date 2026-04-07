@@ -1,5 +1,8 @@
-package dev.LimaDevCod3r.PitStopAPI.Vehicles;
+package dev.LimaDevCod3r.PitStopAPI.controller;
 
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleDTO;
+import dev.LimaDevCod3r.PitStopAPI.dto.VehicleResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.service.VehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -92,4 +95,3 @@ public class VehicleController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado ID: " + id);
     }
 }
-

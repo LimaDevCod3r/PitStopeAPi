@@ -1,9 +1,11 @@
-package dev.LimaDevCod3r.PitStopAPI.Customers;
+package dev.LimaDevCod3r.PitStopAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.LimaDevCod3r.PitStopAPI.Vehicles.VehicleModel;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
