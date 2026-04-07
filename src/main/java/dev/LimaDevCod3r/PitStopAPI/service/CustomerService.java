@@ -2,6 +2,7 @@ package dev.LimaDevCod3r.PitStopAPI.service;
 
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerRequestDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.exception.InactiveResourceException;
 import dev.LimaDevCod3r.PitStopAPI.exception.ResourceAlreadyExistsException;
 import dev.LimaDevCod3r.PitStopAPI.exception.ResourceNotFoundException;
 import dev.LimaDevCod3r.PitStopAPI.mapper.CustomerMapper;
@@ -10,8 +11,6 @@ import dev.LimaDevCod3r.PitStopAPI.repository.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CustomerService {
@@ -25,13 +24,18 @@ public class CustomerService {
     }
 
     public Page<CustomerResponseDTO> getAll(Pageable pageable) {
-        return customerRepository.findAll(pageable)
+        return customerRepository.findAllByActiveTrue(pageable)
                 .map(customerMapper::mapToResponse);
     }
 
     public CustomerResponseDTO getById(Long id) {
         CustomerModel customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
+
+        if (!customer.getActive()) {
+            throw new InactiveResourceException("Customer", id);
+        }
+
         return customerMapper.mapToResponse(customer);
     }
 
@@ -59,6 +63,12 @@ public class CustomerService {
         CustomerModel customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
 
+
+        // Bloqueia operação se cliente inativo
+        if (!customer.getActive()) {
+            throw new InactiveResourceException("Customer", id);
+        }
+
         //  Se o CPF mudou, verifica se o novo CPF já pertence a outro usuário.
         if (customerRequestDTO.getCpf() != null && !customerRequestDTO.getCpf().equals(customer.getCpf())) {
             if (customerRepository.existsByCpf(customerRequestDTO.getCpf())) {
@@ -85,8 +95,9 @@ public class CustomerService {
     }
 
     public void deleteById(Long id) {
-        customerRepository.findById(id)
+        CustomerModel customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", id));
-        customerRepository.deleteById(id);
+        customer.deactivate();
+        customerRepository.save(customer);
     }
 }
