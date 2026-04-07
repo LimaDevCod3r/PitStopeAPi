@@ -2,6 +2,7 @@ package dev.LimaDevCod3r.PitStopAPI.service;
 
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerRequestDTO;
 import dev.LimaDevCod3r.PitStopAPI.dto.CustomerResponseDTO;
+import dev.LimaDevCod3r.PitStopAPI.exception.InactiveResourceException;
 import dev.LimaDevCod3r.PitStopAPI.exception.ResourceAlreadyExistsException;
 import dev.LimaDevCod3r.PitStopAPI.exception.ResourceNotFoundException;
 import dev.LimaDevCod3r.PitStopAPI.mapper.CustomerMapper;
@@ -58,6 +59,7 @@ class CustomerServiceTest {
         customerModel.setCpf("12345678901");
         customerModel.setEmail("joao@email.com");
         customerModel.setPhone("11999999999");
+        customerModel.setActive(true);
     }
 
     @Nested
@@ -71,8 +73,8 @@ class CustomerServiceTest {
             Pageable pageable = PageRequest.of(0, 10);
             Page<CustomerModel> page = new PageImpl<>(List.of(customerModel), pageable, 1);
 
-            // Configura o repositório para retornar a página fake quando chamado.
-            when(customerRepository.findAll(pageable)).thenReturn(page);
+            // Configura o repositório para retornar a página fake apenas de clientes ativos.
+            when(customerRepository.findAllByActiveTrue(pageable)).thenReturn(page);
 
             // Chama o método do Service que será testado.
             Page<CustomerResponseDTO> result = customerService.getAll(pageable);
@@ -82,8 +84,8 @@ class CustomerServiceTest {
             assertThat(result.getContent()).hasSize(1);
             assertThat(result.getContent().getFirst().getName()).isEqualTo("João Silva");
 
-            //  Confirma que o repositório foi realmente acionado.
-            verify(customerRepository).findAll(pageable);
+            //  Confirma que o repositório foi chamado com o método de ativos.
+            verify(customerRepository).findAllByActiveTrue(pageable);
         }
 
         @Test
@@ -93,8 +95,8 @@ class CustomerServiceTest {
             Pageable pageable = PageRequest.of(0, 10);
             Page<CustomerModel> page = Page.empty(pageable);
 
-            // Configura o repositório para devolver essa página vazia
-            when(customerRepository.findAll(pageable)).thenReturn(page);
+            // Configura o repositório para devolver essa página vazia de clientes ativos
+            when(customerRepository.findAllByActiveTrue(pageable)).thenReturn(page);
 
             Page<CustomerResponseDTO> result = customerService.getAll(pageable);
 
@@ -102,7 +104,7 @@ class CustomerServiceTest {
             // Garante que o resultado da lista está realmente vazio.
             assertThat(result.getContent()).isEmpty();
 
-            verify(customerRepository).findAll(pageable);
+            verify(customerRepository).findAllByActiveTrue(pageable);
         }
     }
 
@@ -134,18 +136,22 @@ class CustomerServiceTest {
         @Test
         @DisplayName("Deve lançar exceção quando CPF já existe")
         void shouldThrowWhenCpfAlreadyExists() {
+            //  Simula que o CPF já existe no banco de dados.
             when(customerRepository.existsByCpf(anyString())).thenReturn(true);
 
+            // Tenta criar o cliente e espera que  a exceção ResourceAlreadyExistsException seja lançada.
             assertThatThrownBy(() -> customerService.create(requestDTO))
                     .isInstanceOf(ResourceAlreadyExistsException.class)
                     .hasMessageContaining("CPF");
 
+            // Garante que o método save NUNCA foi chamado
             verify(customerRepository, never()).save(any());
         }
 
         @Test
         @DisplayName("Deve lançar exceção quando E-mail já existe")
         void shouldThrowWhenEmailAlreadyExists() {
+            // CPF não existe (passa na 1ª validação), mas o E-mail já existe (falha na 2ª)
             when(customerRepository.existsByCpf(anyString())).thenReturn(false);
             when(customerRepository.existsByEmail(anyString())).thenReturn(true);
 
@@ -293,6 +299,91 @@ class CustomerServiceTest {
             updateDTO.setPhone("11999999999");
 
             assertThatThrownBy(() -> customerService.update(1L, updateDTO))
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessageContaining("não encontrado");
+        }
+
+        @Test
+        @DisplayName("Deve lançar InactiveResourceException se cliente inativo")
+        void shouldThrowWhenCustomerIsInactive() {
+            CustomerModel inactiveModel = new CustomerModel();
+            inactiveModel.setId(1L);
+            inactiveModel.setName("João Desativado");
+            inactiveModel.setCpf("12345678901");
+            inactiveModel.setEmail("joao@email.com");
+            inactiveModel.setPhone("11999999999");
+            inactiveModel.setActive(false);
+
+            when(customerRepository.findById(1L)).thenReturn(Optional.of(inactiveModel));
+
+            CustomerRequestDTO updateDTO = new CustomerRequestDTO();
+            updateDTO.setName("João Atualizado");
+            updateDTO.setCpf("12345678901");
+            updateDTO.setEmail("joao@email.com");
+            updateDTO.setPhone("11888888888");
+
+            assertThatThrownBy(() -> customerService.update(1L, updateDTO))
+                    .isInstanceOf(InactiveResourceException.class)
+                    .hasMessageContaining("inativo");
+        }
+    }
+
+    @Nested
+    @DisplayName("getById - busca por ID")
+    class GetById {
+
+        @Test
+        @DisplayName("Deve retornar cliente quando ativo")
+        void shouldReturnCustomerWhenActive() {
+            when(customerRepository.findById(1L)).thenReturn(Optional.of(customerModel));
+
+            CustomerResponseDTO result = customerService.getById(1L);
+
+            assertThat(result).isNotNull();
+            assertThat(result.getName()).isEqualTo("João Silva");
+        }
+
+        @Test
+        @DisplayName("Deve lançar InactiveResourceException quando cliente inativo")
+        void shouldThrowWhenCustomerIsInactive() {
+            CustomerModel inactiveModel = new CustomerModel();
+            inactiveModel.setId(1L);
+            inactiveModel.setName("João Desativado");
+            inactiveModel.setCpf("11122233344");
+            inactiveModel.setEmail("inactive@email.com");
+            inactiveModel.setPhone("11999999999");
+            inactiveModel.setActive(false);
+
+            when(customerRepository.findById(1L)).thenReturn(Optional.of(inactiveModel));
+
+            assertThatThrownBy(() -> customerService.getById(1L))
+                    .isInstanceOf(InactiveResourceException.class)
+                    .hasMessageContaining("inativo");
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteById - soft delete")
+    class DeleteById {
+
+        @Test
+        @DisplayName("Deve desativar cliente com sucesso")
+        void shouldDeactivateCustomer() {
+            when(customerRepository.findById(1L)).thenReturn(Optional.of(customerModel));
+            when(customerRepository.save(any(CustomerModel.class))).thenReturn(customerModel);
+
+            customerService.deleteById(1L);
+
+            assertThat(customerModel.getActive()).isFalse();
+            verify(customerRepository).save(customerModel);
+        }
+
+        @Test
+        @DisplayName("Deve lançar ResourceNotFoundException se cliente não existe")
+        void shouldThrowWhenCustomerNotFound() {
+            when(customerRepository.findById(999L)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> customerService.deleteById(999L))
                     .isInstanceOf(ResourceNotFoundException.class)
                     .hasMessageContaining("não encontrado");
         }
