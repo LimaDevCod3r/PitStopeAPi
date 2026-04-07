@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { UserRound } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 
@@ -89,7 +90,7 @@ export default function ClientsPage() {
         <div className="spinner" />
       ) : clients.length === 0 ? (
         <div className="empty-state card">
-          <div className="empty-state-icon">👤</div>
+          <div className="empty-state-icon"><UserRound size={48} /></div>
           <h3>Nenhum cliente encontrado</h3>
           <p className="text-muted">Cadastre o primeiro cliente clicando no botão acima</p>
         </div>

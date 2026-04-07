@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Users, Car, Wrench } from 'lucide-react';
 import api from '../lib/api';
 
 const stats = [
-  { key: 'totalClients', label: 'Clientes', color: 'var(--color-info)', icon: '👤' },
-  { key: 'totalVehicles', label: 'Veiculos', color: 'var(--color-primary)', icon: '🚗' },
-  { key: 'totalServiceOrders', label: 'Ordens de Servico', color: 'var(--color-secondary)', icon: '📋' },
+  { key: 'totalClients', label: 'Clientes', color: 'var(--color-info)', icon: Users },
+  { key: 'totalVehicles', label: 'Veiculos', color: 'var(--color-primary)', icon: Car },
+  { key: 'totalServiceOrders', label: 'Ordens de Servico', color: 'var(--color-secondary)', icon: Wrench },
 ];
 
 export default function DashboardPage() {
@@ -32,15 +33,18 @@ export default function DashboardPage() {
       <p className="page-subtitle">Visao geral da oficina</p>
 
       <div className="stats-grid">
-        {stats.map((stat) => (
-          <div key={stat.key} className="stat-card">
-            <div className="stat-icon">{stat.icon}</div>
-            <div className="stat-value" style={{ color: stat.color }}>
-              {loading ? '...' : data?.[stat.key] ?? 0}
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div key={stat.key} className="stat-card">
+              <Icon className="stat-icon" size={40} color={stat.color} />
+              <div className="stat-value" style={{ color: stat.color }}>
+                {loading ? '...' : data?.[stat.key] ?? 0}
+              </div>
+              <div className="stat-label">{stat.label}</div>
             </div>
-            <div className="stat-label">{stat.label}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="welcome-card card">

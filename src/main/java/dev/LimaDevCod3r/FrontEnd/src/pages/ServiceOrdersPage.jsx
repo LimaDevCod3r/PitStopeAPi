@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ClipboardList } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 
@@ -118,7 +119,7 @@ export default function ServiceOrdersPage() {
         <div className="spinner" />
       ) : orders.length === 0 ? (
         <div className="empty-state card">
-          <div className="empty-state-icon">📋</div>
+          <div className="empty-state-icon"><ClipboardList size={48} /></div>
           <h3>Nenhuma ordem de servico encontrada</h3>
           <p className="text-muted">Cadastre a primeira ordem clicando no botao acima</p>
         </div>

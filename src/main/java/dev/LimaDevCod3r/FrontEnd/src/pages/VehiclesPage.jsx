@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Car } from 'lucide-react';
 import api from '../lib/api';
 import Modal from '../components/Modal';
 
@@ -99,7 +100,7 @@ export default function VehiclesPage() {
         <div className="spinner" />
       ) : vehicles.length === 0 ? (
         <div className="empty-state card">
-          <div className="empty-state-icon">🚗</div>
+          <div className="empty-state-icon"><Car size={48} /></div>
           <h3>Nenhum veiculo encontrado</h3>
           <p className="text-muted">Cadastre o primeiro veiculo clicando no botao acima</p>
         </div>
